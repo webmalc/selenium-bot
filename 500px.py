@@ -25,10 +25,10 @@ class App(object):
             EC.presence_of_element_located((By.CSS_SELECTOR, "a.new_fav"))
         )
 
-    def _like(self, skip=False):
+    def _like(self, skip=False, iterations=10):
         self._wait_for_links()
         counter = 0
-        for i in range(0, 3):
+        for i in range(0, iterations):
             for link in self.driver.find_elements_by_css_selector('a.new_fav:not(.hearted)'):
                 try:
                     if not skip or (skip and random.randrange(1, 11) > 3):
@@ -45,7 +45,7 @@ class App(object):
     def run(self):
         # following
         self._auth()
-        self._like()
+        self._like(iterations=3)
 
         # fresh
         self.driver.get('https://500px.com/fresh')
