@@ -1,0 +1,2 @@
+USERNAME = 'login'
+PASS = 'pass'
