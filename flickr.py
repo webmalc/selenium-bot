@@ -41,7 +41,7 @@ class App(object):
                 except:
                     pass
 
-                if counter > 1000:
+                if counter > 500:
                     print('Total: {}'.format(counter))
                     return True
 
