@@ -58,19 +58,19 @@ class App(object):
 
         # Flickrist group
         self.driver.get('https://www.flickr.com/groups/flickritis/pool/')
-        self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave')
+        self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave:not(.can-not-fave)')
 
         # Amateurs group
         self.driver.get('https://www.flickr.com/groups/amateurs/pool/')
-        self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave')
+        self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave:not(.can-not-fave)')
 
         # Canon EF 24-105mm f/4L IS USM group
         self.driver.get('https://www.flickr.com/groups/canon24-105mmf4lis/pool/')
-        self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave')
+        self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave:not(.can-not-fave)')
 
         # Recent photos
         self.driver.get('https://www.flickr.com/explore')
-        self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave')
+        self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave:not(.can-not-fave)')
 
         self.driver.close()
 
