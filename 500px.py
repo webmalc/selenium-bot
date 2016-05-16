@@ -25,7 +25,7 @@ class App(object):
             EC.presence_of_element_located((By.CSS_SELECTOR, "a.new_fav"))
         )
 
-    def _like(self, skip=False, iterations=10):
+    def _like(self, skip=False, iterations=20):
         self._wait_for_links()
         counter = 0
         for i in range(0, iterations):
@@ -45,7 +45,7 @@ class App(object):
     def run(self):
         # following
         self._auth()
-        self._like(iterations=3)
+        self._like(iterations=4)
 
         # fresh
         self.driver.get('https://500px.com/fresh')
@@ -57,6 +57,10 @@ class App(object):
 
         # popular
         self.driver.get('https://500px.com/popular')
+        self._like(skip=True)
+
+        # popular
+        self.driver.get('https://500px.com/editors')
         self._like(skip=True)
 
         self.driver.close()
