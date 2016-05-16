@@ -28,7 +28,7 @@ class App(object):
             EC.presence_of_element_located((By.CSS_SELECTOR, wait_class))
         )
 
-    def _like(self, skip=False, iterations=20, wait_class='li.favorites', selector='li.favorites:not(.is_fav) > a.rapidnofollow'):
+    def _like(self, skip=False, iterations=30, wait_class='li.favorites', selector='li.favorites:not(.is_fav) > a.rapidnofollow'):
         self._wait_for_links(wait_class)
         counter = 0
         for i in range(0, iterations):
@@ -54,7 +54,7 @@ class App(object):
 
     def run(self):
         self._auth()
-        self._like(iterations=10)
+        self._like(iterations=20)
 
         # Flickrist group
         self.driver.get('https://www.flickr.com/groups/flickritis/pool/')
