@@ -59,6 +59,10 @@ class App(object):
         # Flickrist group
         self.driver.get('https://www.flickr.com/groups/flickritis/pool/')
         self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave:not(.can-not-fave)')
+        
+        # Flickr central
+        self.driver.get('https://www.flickr.com/groups/central/pool/')
+        self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave:not(.can-not-fave)')
 
         # Amateurs group
         self.driver.get('https://www.flickr.com/groups/amateurs/pool/')
