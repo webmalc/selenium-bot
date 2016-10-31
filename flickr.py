@@ -17,18 +17,20 @@ class App(object):
     def _auth(self):
         self.driver.get('https://www.flickr.com/signin')
 
-        self.driver.find_element_by_id('login-username').send_keys(settings.USERNAME)
+        self.driver.find_element_by_id('login-username').send_keys(settings.USERNAME_FLICKR)
         self.driver.find_element_by_id('login-signin').click()
         time.sleep(1)
         self.driver.find_element_by_id('login-passwd').send_keys(settings.PASS)
         self.driver.find_element_by_id('login-signin').click()
+        time.sleep(5)
+        self.driver.get('https://www.flickr.com/photos/friends/')
 
     def _wait_for_links(self, wait_class='li.favorites'):
         WebDriverWait(self.driver, 20).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, wait_class))
         )
 
-    def _like(self, skip=False, iterations=30, wait_class='li.favorites', selector='li.favorites:not(.is_fav) > a.rapidnofollow'):
+    def _like(self, skip=False, iterations=50, wait_class='li.favorites', selector='li.favorites:not(.is_fav) > a.rapidnofollow'):
         self._wait_for_links(wait_class)
         counter = 0
         for i in range(0, iterations):
@@ -54,12 +56,16 @@ class App(object):
 
     def run(self):
         self._auth()
-        self._like(iterations=20)
+        #self._like(iterations=40)
 
         # Flickrist group
         self.driver.get('https://www.flickr.com/groups/flickritis/pool/')
         self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave:not(.can-not-fave)')
-        
+
+        # FlickrToday
+        self.driver.get('https://www.flickr.com/groups/flickrtoday/pool/')
+        self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave:not(.can-not-fave)')
+
         # Flickr central
         self.driver.get('https://www.flickr.com/groups/central/pool/')
         self._like(skip=True, wait_class='i.fave-star', selector='i.fave-star.fave:not(.can-not-fave)')

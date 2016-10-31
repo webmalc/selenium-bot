@@ -15,17 +15,19 @@ class App(object):
         self.driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver')
 
     def _auth(self):
-        self.driver.get('https://500px.com/following')
+        self.driver.get('https://500px.com/login')
         self.driver.find_element_by_name('email').send_keys(settings.USERNAME)
         self.driver.find_element_by_name('password').send_keys(settings.PASS)
-        self.driver.find_element_by_css_selector('input.login_only').click()
+        self.driver.find_element_by_css_selector('input.unified_signup__submit_button').click()
+        time.sleep(5)
+        self.driver.get('https://500px.com/')
 
     def _wait_for_links(self):
         WebDriverWait(self.driver, 20).until(
             EC.presence_of_element_located((By.CSS_SELECTOR, "a.new_fav"))
         )
 
-    def _like(self, skip=False, iterations=20):
+    def _like(self, skip=False, iterations=50):
         self._wait_for_links()
         counter = 0
         for i in range(0, iterations):
@@ -45,7 +47,7 @@ class App(object):
     def run(self):
         # following
         self._auth()
-        self._like(iterations=4)
+        self._like(iterations=150)
 
         # fresh
         self.driver.get('https://500px.com/fresh')
