@@ -12,7 +12,7 @@ import settings
 class App(object):
 
     def __init__(self):
-        self.driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver')
+        self.driver = webdriver.Chrome(settings.DRIVER_PATH)
 
     def _auth(self):
         self.driver.get('https://www.flickr.com/signin')
@@ -20,10 +20,9 @@ class App(object):
         self.driver.find_element_by_id('login-username').send_keys(settings.USERNAME_FLICKR)
         self.driver.find_element_by_id('login-signin').click()
         time.sleep(1)
-        self.driver.find_element_by_id('login-passwd').send_keys(settings.PASS)
+        self.driver.find_element_by_id('login-passwd').send_keys(settings.PASS_FLICKR)
         self.driver.find_element_by_id('login-signin').click()
         time.sleep(5)
-        self.driver.get('https://www.flickr.com/photos/friends/')
 
     def _wait_for_links(self, wait_class='li.favorites'):
         WebDriverWait(self.driver, 20).until(
@@ -56,7 +55,7 @@ class App(object):
 
     def run(self):
         self._auth()
-        #self._like(iterations=40)
+        self._like(wait_class=".activity-card-content", selector="a.activity-card-fave:not(.faved)")
 
         # Flickrist group
         self.driver.get('https://www.flickr.com/groups/flickritis/pool/')
