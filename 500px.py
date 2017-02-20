@@ -27,22 +27,30 @@ class App(object):
             EC.presence_of_element_located((By.CSS_SELECTOR, "a.new_fav"))
         )
 
-    def _like(self, skip=False, iterations=3):
+    def _like(self, skip=False, iterations=50):
+        self.driver.execute_script("window.scrollTo(document.body.scrollWidth, 0);")
         self._wait_for_links()
         counter = 0
 
         for i in range(0, iterations):
-            self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-            time.sleep(1)
+            for link in self.driver.find_elements_by_css_selector('a.new_fav:not(.hearted)'):
+                try:
+                    if not skip or (skip and random.randrange(1, 11) > 3):
+                        self.driver.execute_script("window.scrollTo({}, {});".format(
+                            link.location['x'], link.location['y'] - 100
+                        ))
+                        link.click()
+                    counter += 1
+                    time.sleep(random.randrange(1, 3))
+                except:
+                    pass
 
-        for link in self.driver.find_elements_by_css_selector('a.new_fav:not(.hearted)'):
-            try:
-                if not skip or (skip and random.randrange(1, 11) > 3):
-                    link.click()
-                counter += 1
-                time.sleep(random.randrange(1, 3))
-            except:
-                pass
+                if counter > 1500:
+                    print('Total: {}'.format(counter))
+                    return True
+
+            self.driver.execute_script("window.scrollTo(document.body.scrollWidth, document.body.scrollHeight);")
+            self._wait_for_links()
 
         print('Total: {}'.format(counter))
 

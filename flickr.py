@@ -36,19 +36,27 @@ class App(object):
             for link in self.driver.find_elements_by_css_selector(selector):
                 try:
                     if not skip or (skip and random.randrange(1, 11) > 3):
+                        self.driver.execute_script("window.scrollTo({}, {});".format(
+                            link.location['x'], link.location['y'] - 100
+                        ))
                         link.click()
                     counter += 1
                     time.sleep(random.randrange(1, 3))
                 except:
                     pass
 
-                if counter > 500:
+                if counter > 1500:
                     print('Total: {}'.format(counter))
                     return True
 
             time.sleep(5)
             self._wait_for_links(wait_class)
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            try:
+                load_more = self.driver.find_elements_by_xpath("//*[contains(text(), 'Load more')]")
+                load_more.click()
+            except:
+                pass
 
         print('Total: {}'.format(counter))
         return True
