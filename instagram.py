@@ -11,14 +11,8 @@ import settings
 
 
 class App(object):
-
-    tags = [
-        'детскаяфотосессия', 'фотограф', 'фотография', 'свадебнаяфотография', 'lovestory',
-        'дети', 'красота'
-    ]
-
     def __init__(self):
-        self.driver = webdriver.Chrome('/usr/lib/chromium-browser/chromedriver')
+        self.driver = webdriver.Chrome(settings.DRIVER_PATH)
 
     def _auth(self):
         self.driver.get('https://www.instagram.com/')
@@ -33,15 +27,22 @@ class App(object):
             EC.presence_of_element_located((By.CSS_SELECTOR, wait_class))
         )
 
-    def _like(self, skip=False, iterations=50, wait_selector="article", selector='span.coreSpriteHeartOpen', popup=None):
+    def _like(self, skip=False, iterations=50, wait_selector="article", selector='span.coreSpriteHeartOpen',
+              popup=None):
         self._wait_for_links(wait_selector)
         counter = 0
+        done = []
         for i in range(0, iterations):
             for link in self.driver.find_elements_by_css_selector(selector):
-                if not skip or (skip and random.randrange(1, 11) > 2):
+                if (not skip or (skip and random.randrange(1, 11) > 2)) and (
+                        link.get_attribute('href') not in done or not popup):
+                    done.append(link.get_attribute('href'))
+                    self.driver.execute_script("window.scrollTo({}, {});".format(
+                        link.location['x'], link.location['y'] - 100
+                    ))
                     link.click()
                     if popup:
-                        time.sleep(random.randrange(1, 3))
+                        time.sleep(random.randrange(1, 2))
                         try:
                             self.driver.find_element_by_css_selector(popup).click()
                         except NoSuchElementException:
@@ -50,14 +51,13 @@ class App(object):
                             self.driver.find_element_by_css_selector('button._3eajp').click()
                         except NoSuchElementException:
                             pass
-                counter += 1
-                time.sleep(random.randrange(1, 3))
+                    counter += 1
+                    time.sleep(random.randrange(1, 2))
 
-                if counter > 500:
-                    print('Total: {}'.format(counter))
-                    return True
+                    if counter > settings.MAX_PHOTOS:
+                        print('Total: {}'.format(counter))
+                        return True
 
-            time.sleep(random.randrange(3, 5))
             load_more = self.driver.find_elements_by_xpath("//a[contains(text(), 'Load more')]")
             if len(load_more):
                 try:
@@ -66,6 +66,7 @@ class App(object):
                     print('load_more exception')
                     pass
 
+            time.sleep(random.randrange(1, 2))
             self._wait_for_links(wait_selector)
             self.driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
@@ -74,9 +75,9 @@ class App(object):
 
     def run(self):
         self._auth()
-        self._like()
+        #self._like()
 
-        for tag in self.tags:
+        for tag in settings.TAGS_INSTAGRAM:
             self.driver.get('https://www.instagram.com/explore/tags/{}/'.format(tag))
             self._like(selector='a._8mlbc', wait_selector='a._8mlbc', popup='span.coreSpriteHeartOpen')
         self.driver.close()
