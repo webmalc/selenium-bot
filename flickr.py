@@ -17,10 +17,14 @@ class App(object):
     def _auth(self):
         self.driver.get('https://www.flickr.com/signin')
 
-        self.driver.find_element_by_id('login-username').send_keys(settings.USERNAME_FLICKR)
+        self.driver.find_element_by_id('login-username').send_keys(
+            settings.USERNAME_FLICKR
+        )
         self.driver.find_element_by_id('login-signin').click()
         time.sleep(1)
-        self.driver.find_element_by_id('login-passwd').send_keys(settings.PASS_FLICKR)
+        self.driver.find_element_by_id('login-passwd').send_keys(
+            settings.PASS_FLICKR
+        )
         self.driver.find_element_by_id('login-signin').click()
         time.sleep(5)
 

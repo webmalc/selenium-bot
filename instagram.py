@@ -75,7 +75,7 @@ class App(object):
 
     def run(self):
         self._auth()
-        #self._like()
+        self._like()
 
         for tag in settings.TAGS_INSTAGRAM:
             self.driver.get('https://www.instagram.com/explore/tags/{}/'.format(tag))
