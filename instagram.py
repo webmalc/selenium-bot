@@ -54,7 +54,7 @@ class App(object):
                     counter += 1
                     time.sleep(random.randrange(1, 2))
 
-                    if counter > settings.MAX_PHOTOS:
+                    if counter > settings.MAX_PHOTOS_INSTAGRAM:
                         print('Total: {}'.format(counter))
                         return True
 
