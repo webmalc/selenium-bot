@@ -74,7 +74,9 @@ class App(object):
 
     def run(self):
         self._auth()
-        # self._like(wait_class=".activity-card-content", selector="a.activity-card-fave:not(.faved)")
+        self._like(
+            wait_class=".activity-card-content",
+            selector="a.activity-card-fave:not(.faved)")
 
         # Flickrist group
         self.driver.get('https://www.flickr.com/groups/flickritis/pool/')
