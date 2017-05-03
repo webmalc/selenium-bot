@@ -8,7 +8,9 @@ USERNAME_FLICKR = 'username@gmail.com'
 PASS_FLICKR = 'pass'
 
 USERNAME_INSTAGRAM = 'username@gmail.com'
+
 PASS_INSTAGRAM = 'pass'
+MAX_PHOTOS_INSTAGRAM = 30
 TAGS_INSTAGRAM = (
    'дети', 'детишки', 'ребенок', 'очаровашки', 'улыбка', 'семья',
    'симпатичные', 'фотодети', 'инстаграманет', 'инстатаг',
@@ -17,3 +19,4 @@ TAGS_INSTAGRAM = (
    'мелкиймой', 'малявка', 'сын', 'сыночек', 'дочь', 'дочка', 'бусинка',
    'бусинкамоя', 'малой'
 )
+
