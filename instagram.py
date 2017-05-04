@@ -3,7 +3,6 @@
 import random
 import time
 
-import settings
 from selenium import webdriver
 from selenium.common.exceptions import (NoSuchElementException,
                                         WebDriverException)
@@ -11,10 +10,13 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 
+import settings
+
 
 class App(object):
     def __init__(self):
         self.driver = webdriver.Chrome(settings.DRIVER_PATH)
+        self.counter = 0
 
     def _auth(self):
         self.driver.get('https://www.instagram.com/')
@@ -36,9 +38,10 @@ class App(object):
               skip=False,
               iterations=50,
               wait_selector="article",
-              selector='span.coreSpriteHeartOpen',
+              selector='span.coreSpriteLikeHeartOpen',
               popup=None):
         self._wait_for_links(wait_selector)
+        print('Start on URL {}'.format(self.driver.current_url))
         counter = 0
         done = []
         for i in range(0, iterations):
@@ -51,6 +54,7 @@ class App(object):
                             'x'], link.location['y'] - 100))
                     try:
                         link.click()
+                        time.sleep(random.randrange(1, 2))
                     except WebDriverException:
                         print('link exception')
                     if popup:
@@ -68,6 +72,8 @@ class App(object):
                             print('close exception')
                             pass
                     counter += 1
+                    self.counter += 1
+                    print('Likes: {}'.format(self.counter))
                     time.sleep(random.randrange(1, 2))
 
                     if counter > settings.MAX_PHOTOS_INSTAGRAM:
@@ -88,12 +94,12 @@ class App(object):
             self.driver.execute_script(
                 "window.scrollTo(0, document.body.scrollHeight);")
 
-        print('Total: {}'.format(counter))
+        print('Total on URL {}: {}'.format(self.driver.current_url, counter))
         return True
 
     def run(self):
         self._auth()
-        # self._like()
+        self._like()
 
         for tag in settings.TAGS_INSTAGRAM:
             self.driver.get(
@@ -101,7 +107,7 @@ class App(object):
             self._like(
                 selector='a._8mlbc',
                 wait_selector='a._8mlbc',
-                popup='span.coreSpriteHeartOpen')
+                popup='span.coreSpriteLikeHeartOpen')
         self.driver.close()
 
 
